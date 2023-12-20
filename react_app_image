@@ -1,0 +1,28 @@
+# adding base image
+FROM amazonlinux 
+
+# what will be working directory in image 
+WORKDIR /client
+
+# copying all files from host directory to image working directory
+COPY . /client
+ 
+COPY package.json /client
+ 
+#COPY package-lock.json /client
+
+# setting user like linux root user so we don't have to write sudo again and again
+USER root
+
+# this will download all the dependency ,it will be run during build process only
+RUN \
+     yum update -y && \
+     yum install -y nodejs npm && \
+     npm install
+
+# on which port application will be running
+EXPOSE 3000
+
+# this will be executed when we run docker run
+CMD ["npm","start"]
+
